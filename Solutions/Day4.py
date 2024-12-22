@@ -2,7 +2,6 @@ import string
 
 import commonFuncs as CF
 
-
 input_data = CF.get_input_data_as_matrix(4)
 g_max_rows = len(input_data) - 1
 g_max_columns = len(input_data[0]) - 1
@@ -23,7 +22,6 @@ def get_locations_by_letter_index(data, letter_index: int) -> [(int, int)]:
 
 
 def build_valid_paths(x_start: (int, int)) -> [[int]]:
-
     paths = []
 
     row = x_start[0]
@@ -93,17 +91,104 @@ def path_to_characters(data, path: [(int, int)]) -> str:
     return return_string
 
 
+def get_x_masses():
+    # generates a list of possible X-MAS, in form of the five relevant characters
+    # this grid:
+    #   S ? S
+    #   ? A ?
+    #   M ? M
+    #
+    # becomes a list with the indexes as:
+    #   0 ? 1
+    #   ? 2 ?
+    #   4 ? 5
+    # so it'd look like this: [S,S,A,M,M]
+
+    # used to generate all combos of S?S, S?M etc
+    top = ["S", "M"]
+    bottom = top
+
+    possible_xmases = []
+    for i in top:
+        for j in bottom:
+
+
+            # oppose the bottom right to the top left
+            if i == "M":
+                m = "S"
+            else:
+                m = "M"
+
+            # same for the rights
+            if j == "M":
+                k = "S"
+            else:
+                k = "M"
+
+            # generate a list, of a list of chars for each line
+            mas_combo = [i, j, "A", k, m]
+
+            # add this combo to the master list
+            possible_xmases.append(mas_combo)
+
+    return possible_xmases
+
+
+def index_to_grid_list(data, index: (int, int)) -> [str]:
+    # returns the relevant grid from a starting point
+    # this grid:
+    #   S ? S
+    #   ? A ?
+    #   M ? M
+    #
+    # becomes a list with the indexes as:
+    #   0 ? 1
+    #   ? 2 ?
+    #   4 ? 5
+    # so it'd look like this: [S,S,A,M,M]
+
+    # map of where to offset to in the grid, for each character in the output string.
+    #   0,0  -  0,2
+    #    -  1,1  -
+    #   2,0  -  2,2
+
+    start_row = index[0]
+    start_col = index[1]
+
+    offsets = [(0, 0), (0, 2), (1, 1), (2, 0), (2, 2)]
+    grid_list = []
+    if index[0] <= g_max_columns - 2 and index[1] <= g_max_rows - 2:
+        for offset in offsets:
+            new_row = start_row + offset[0]
+            new_col = start_col + offset[1]
+
+            grid_list.append(data[new_row][new_col])
+    return grid_list
+
+
 def part_one():
     running_sum = 0
     for x in get_locations_by_letter_index(input_data, 0):
-        if x == (2,4):
+        if x == (2, 4):
             pass
         paths = build_valid_paths(x)
         for path in paths:
             string_generated = path_to_characters(input_data, path)
-            if string_generated == 'XMAS':
+            if string_generated == "XMAS":
                 running_sum += 1
 
     print(running_sum)
 
-part_one()
+
+def part_two():
+    running_sum = 0
+    for row, row_data in enumerate(input_data):
+        for col, value in enumerate(row_data):
+            grid = index_to_grid_list(input_data, (row, col))
+            if grid in get_x_masses():
+                running_sum += 1
+                print(grid, (row, col), "Found")
+    print(running_sum)
+
+
+part_two()
