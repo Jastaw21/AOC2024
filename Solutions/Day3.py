@@ -3,7 +3,7 @@ import re
 import commonFuncs as CF
 
 
-input_data = CF.get_input_data(3)
+input_data = CF.get_input_data_as_list_of_lines(3)
 
 # change the seperate line format of the input into one string
 joined_input = "".join(input_data)

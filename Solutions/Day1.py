@@ -1,7 +1,7 @@
 from collections import Counter
 import commonFuncs as CF
 
-input_data = CF.get_input_data(1)
+input_data = CF.get_input_data_as_list_of_lines(1)
 
 l_column = []
 r_column = []
