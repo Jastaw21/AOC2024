@@ -1,10 +1,7 @@
-from pathlib import Path
 from collections import Counter
+import commonFuncs as CF
 
-path = Path(__file__).parent.parent / "Inputs/Day1.txt"
-
-with open(path) as f:
-    input_data = [line for line in f]
+input_data = CF.get_input_data(1)
 
 l_column = []
 r_column = []

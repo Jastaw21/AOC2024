@@ -1,10 +1,9 @@
 from pathlib import Path
 import re
+import commonFuncs as CF
 
-path = Path(__file__).parent.parent / "Inputs/Day3.txt"
 
-with open(path) as f:
-    input_data = [line for line in f]
+input_data = CF.get_input_data(3)
 
 # change the seperate line format of the input into one string
 joined_input = "".join(input_data)
@@ -94,7 +93,7 @@ def part_two():
     running_sum = 0
     for i in get_valid_ranges():
         # get the sliced string to test
-        string_to_test = joined_input[i[0]:i[1] + len("don't()")]
+        string_to_test = joined_input[i[0] : i[1] + len("don't()")]
 
         matches = get_raw_matches(string_to_test)
         for match in matches:
