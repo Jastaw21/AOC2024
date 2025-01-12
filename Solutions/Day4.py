@@ -1,5 +1,3 @@
-import string
-
 import commonFuncs as CF
 
 input_data = CF.get_input_data_as_matrix(4)
@@ -111,7 +109,6 @@ def get_x_masses():
     possible_xmases = []
     for i in top:
         for j in bottom:
-
 
             # oppose the bottom right to the top left
             if i == "M":
