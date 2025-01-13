@@ -1,6 +1,6 @@
-import commonfuncs as CF
+from Utility import commonfuncs as cf
 
-input_data = CF.get_input_data_as_matrix(4)
+input_data = cf.get_input_data_as_matrix(4)
 g_max_rows = len(input_data) - 1
 g_max_columns = len(input_data[0]) - 1
 

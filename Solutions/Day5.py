@@ -1,7 +1,6 @@
-import commonfuncs as cF
+from Utility import commonfuncs as cf
 
-
-input_data = cF.get_input_data_as_list_of_lines(5)
+input_data = cf.get_input_data_as_list_of_lines(5)
 
 
 # to find where the seperator from the order rules, to the lists of pages is

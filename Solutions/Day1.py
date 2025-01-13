@@ -1,5 +1,5 @@
 from collections import Counter
-import commonfuncs as CF
+from Utility import commonfuncs as CF
 
 input_data = CF.get_input_data_as_list_of_lines(1)
 
