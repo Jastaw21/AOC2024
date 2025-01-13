@@ -1,6 +1,6 @@
 from pathlib import Path
 import re
-import commonFuncs as CF
+import commonfuncs as CF
 
 
 input_data = CF.get_input_data_as_list_of_lines(3)

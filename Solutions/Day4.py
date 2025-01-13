@@ -1,4 +1,4 @@
-import commonFuncs as CF
+import commonfuncs as CF
 
 input_data = CF.get_input_data_as_matrix(4)
 g_max_rows = len(input_data) - 1
