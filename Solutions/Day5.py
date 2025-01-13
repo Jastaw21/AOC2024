@@ -1,7 +1,7 @@
-import commonFuncs as CF
+import commonfuncs as cF
 
 
-input_data = CF.get_input_data_as_list_of_lines(5)
+input_data = cF.get_input_data_as_list_of_lines(5)
 
 
 # to find where the seperator from the order rules, to the lists of pages is
@@ -72,7 +72,7 @@ def test_mapping():
     print(get_rule_orders(mapping_columns))
 
 
-def page_order_is_valid(page_order: [int], rules: {int: [int]}) -> bool:
+def is_ordered(page_order: [int], rules: {int: [int]}) -> bool:
     for index, page_number in enumerate(page_order):
 
         if page_number in rules.keys():
@@ -94,17 +94,82 @@ def get_middle_number(page_order):
     return page_order[middle_index]
 
 
+def part_one():
 
-processed_pages_data = process_pages(get_pages(input_data, find_rule_split(input_data)))
+    # where is the input file split between rules/pages
+    rule_split = find_rule_split(input_data)
+
+    # get the pages, i.e the list of pages that must be printed
+    processed_pages_data = process_pages(get_pages(input_data, rule_split))
+
+    # turn the rules into a usable format
+    mapping_columns = mapping_to_columns(get_mapping(input_data, rule_split))
+
+    # use this to build the rules
+    rule_orders = get_rule_orders(mapping_columns)
+
+    # iterate through all of the given manuals, and increment the count if they're valid
+    running_sum = 0
+    for i in processed_pages_data:
+
+        if is_ordered(i, rule_orders):
+            running_sum += get_middle_number(i)
+
+    print(running_sum)
 
 
-mapping_columns = mapping_to_columns(get_mapping(input_data, find_rule_split(input_data)))
-rule_orders = get_rule_orders(mapping_columns)
+def fix_order(pages, rules):
 
-running_sum = 0
-for i in processed_pages_data:
+    new_pages = [i for i in pages]
 
-    if page_order_is_valid(i, rule_orders):
-        running_sum += get_middle_number(i)
+    # while loop to allow continuous checking
+    while not is_ordered(new_pages, rules):
+        # walk through all the pages (enum to give indexing)
+        for index, page_number in enumerate(new_pages):
 
-print(running_sum)
+            # sanitise the page we're looking at, don't want a key error
+            if page_number in rules.keys():
+
+                # this gives all the numbers our current page_number must be before
+                numbers_that_must_follow = rules[page_number]
+
+                # slice to see the numbers that actually precede our numbers
+                for sub_index, num in enumerate(new_pages[:index]):
+
+                    # if one of them is a number that must follow our number, swap them over
+                    if num in numbers_that_must_follow:
+                        new_pages[sub_index], new_pages[index] = (
+                            new_pages[index],
+                            new_pages[sub_index],
+                        )
+    return new_pages
+
+
+def part_two():
+
+    # where is the input file split between rules/pages
+    rule_split = find_rule_split(input_data)
+
+    # get the pages, i.e the list of pages that must be printed
+    processed_pages_data = process_pages(get_pages(input_data, rule_split))
+
+    # turn the rules into a usable format
+    mapping_columns = mapping_to_columns(get_mapping(input_data, rule_split))
+
+    # use this to build the rules
+    rule_orders = get_rule_orders(mapping_columns)
+
+    running_sum = 0
+    for page_order in processed_pages_data:
+
+        # if it is an invalid number
+        if not is_ordered(page_order, rule_orders):
+
+            fixed_order = fix_order(page_order, rule_orders)
+            running_sum += get_middle_number(fixed_order)
+
+    print(running_sum)
+
+
+part_one()
+part_two()
